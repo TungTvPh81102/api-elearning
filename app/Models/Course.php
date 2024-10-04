@@ -31,4 +31,9 @@ class Course extends Model
         'benefits' => [],
         'qa' => [],
     ];
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
 }

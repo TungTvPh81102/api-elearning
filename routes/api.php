@@ -20,4 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(['cors'])->group(function () {
     Route::apiResource('courses', \App\Http\Controllers\API\CourseController::class);
+    Route::get('/courses/{slug}/lessons', [\App\Http\Controllers\API\CourseController::class, 'getLessons']);
+    Route::apiResource('lessons', \App\Http\Controllers\API\LessonController::class);
 });

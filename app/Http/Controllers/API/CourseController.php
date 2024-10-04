@@ -27,7 +27,8 @@ class CourseController extends Controller
     public function index()
     {
         try {
-            $data = Course::query()->latest('id')->get();
+            $data = Course::query()
+                ->latest('id')->get();
 
             return response()->json([
                 'message' => 'Danh sách khoá học ',
@@ -93,22 +94,28 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Course $course)
+    public function show(string $slug)
     {
         try {
+            $course = Course::query()
+                ->where('slug', $slug)
+                ->first();
+
+            if (!$course) {
+                throw new \Exception('Không tìm thấy khoá học');
+            }
+
             return response()->json([
                 'message' => 'Chi tiết khoá học: ' . $course->name,
                 'data' => $course
             ]);
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return response()->json([
-                    'message' => 'Không tìm thấy khoá học: ' . $course->name
-                ], Response::HTTP_NOT_FOUND);
-            }
+        } catch (\Exception $e) {
+            Log::error(__CLASS__ . '@' . __FUNCTION__, [
+                'message' => $e->getMessage()
+            ]);
 
             return response()->json([
-                'message' => 'Không tìm thấy khoá học: ' . $course->name
+                'message' => 'Lỗi server'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -136,6 +143,33 @@ class CourseController extends Controller
                 'message' => 'Không thể xoá khoá học: ' . $course->name
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
 
+        }
+    }
+
+    public function getLessons(string $slug)
+    {
+        try {
+            $course = Course::query()
+                ->with('lessons')
+                ->where('slug', $slug)
+                ->first();
+
+            if (!$course) {
+                throw new \Exception('Không tìm thấy khoá học');
+            }
+
+            return response()->json([
+                'message' => 'Danh sách bài học: ' . $course->name,
+                'data' => $course->lessons
+            ]);
+        } catch (\Exception $e) {
+            Log::error(__CLASS__ . '@' . __FUNCTION__, [
+                'message' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'message' => 'Lỗi server'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

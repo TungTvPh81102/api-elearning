@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
-class StoreCourseRequest extends FormRequest
+class StoreLessonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,23 +27,12 @@ class StoreCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'intro_url' => 'required',
-            'image' => 'nullable',
-            'price' => 'nullable|numeric',
-            'price_sale' => 'nullable|numeric',
-            'description' => 'nullable',
-            'status' => [
+            'course_id' => [
                 'required',
-                Rule::in([0, 1])
+                Rule::exists('courses', 'id')
             ],
-            'level' => [
-                'required',
-                Rule::in(['basic', 'intermediate', 'advanced'])
-            ],
-            'requirements' => 'nullable|array',
-            'benefits' => 'nullable|array',
-            'qa' => 'nullable|array',
+            'title' => 'nullable|max:255',
+            'order' => 'nullable|numeric',
         ];
     }
 
