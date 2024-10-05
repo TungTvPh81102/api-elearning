@@ -22,4 +22,7 @@ Route::middleware(['cors'])->group(function () {
     Route::apiResource('courses', \App\Http\Controllers\API\CourseController::class);
     Route::get('/courses/{slug}/lessons', [\App\Http\Controllers\API\CourseController::class, 'getLessons']);
     Route::apiResource('lessons', \App\Http\Controllers\API\LessonController::class);
+    Route::get('/lessons/{id}/lectures', [\App\Http\Controllers\API\LessonController::class, 'getLectures']);
+    Route::apiResource('lectures', \App\Http\Controllers\API\LectureController::class);
+    Route::post('/videos', [\App\Http\Controllers\API\VideoController::class, 'store']);
 });

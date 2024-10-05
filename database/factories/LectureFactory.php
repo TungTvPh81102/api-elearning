@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class LectureFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'lesson_id' => Lesson::pluck('id')->random(),
+            'title' => $this->faker->sentence(),
+            'content' => $this->faker->paragraph(),
+            'order' => $this->faker->numberBetween(0, 10),
         ];
     }
 }

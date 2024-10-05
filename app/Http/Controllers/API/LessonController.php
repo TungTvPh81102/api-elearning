@@ -72,7 +72,7 @@ class LessonController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -132,6 +132,30 @@ class LessonController extends Controller
 
             return response()->json([
                 'message' => 'Lỗi server'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getLectures(string $id)
+    {
+        try {
+            $lectures = Lesson::query()
+                ->with('lectures')
+                ->where('id', $id)
+                ->get();
+
+            return response()->json([
+                'message' => 'Danh sách bài học',
+                'data' => $lectures
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            Log::error(__CLASS__ . '@' . __FUNCTION__, [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'message' => 'Lỗi server',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

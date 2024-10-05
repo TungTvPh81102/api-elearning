@@ -16,13 +16,18 @@ class Lesson extends Model
         'order',
     ];
 
+    public $attributes = [
+        'title' => '',
+        'order' => 0,
+    ];
+
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    public $attributes = [
-        'title' => '',
-        'order' => 0,
-    ];
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class);
+    }
 }

@@ -150,7 +150,7 @@ class CourseController extends Controller
     {
         try {
             $course = Course::query()
-                ->with('lessons')
+                ->with(['lessons', 'lessons.lectures'])
                 ->where('slug', $slug)
                 ->first();
 
